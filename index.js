@@ -1,28 +1,11 @@
 const express = require("express")
+const members = require("./Members")
+const uuid = require("uuid")
 const app = express()
 
 const PORT = 3000
 
-const members = [
-    {
-        id: 1,
-        name: "John Doe",
-        email: "john@gmail.com",
-        status: "active",
-    },
-    {
-        id: 2,
-        name: "Jane Doe",
-        email: "jane@gmail.com",
-        status: "inactive",
-    },
-    {
-        id: 3,
-        name: "steve",
-        email: "steve@gmail.com",
-        status: "active",
-    },
-]
+app.use(express.json())
 
 app.get("/showAllUser", (req, res) => {
     res.status(200).json(members)
@@ -37,6 +20,25 @@ app.get("/showUser/:userId", (req, res) => {
     // if (user.length !== 0) res.status(200).json(user) 
     //     else res.status(404).json({message : `User not found with id ${id}`})
 })
+
+
+app.post("/adduser", (req, res) => {
+    // console.log("User : ", req.body)
+    // const name = req.body.name;
+    // const email = req.body.email;
+
+    const {name, email} = req.body
+    // console.log(name, email)
+
+    members.push({
+        id: uuid.v4(),
+        name,
+        email
+    })
+
+    res.status(200).json(members)
+})
+
 
 app.listen(PORT, ()=> {
     console.log(`Server is running on port http://localhost:${PORT}`)
