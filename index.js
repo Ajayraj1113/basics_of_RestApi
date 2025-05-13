@@ -12,7 +12,7 @@ app.get("/showAllUser", (req, res) => {
 })
 
 app.get("/showUser/:userId", (req, res) => {
-    // console.log(typeof req.params.userId)
+    // console.log("Datatype : ", typeof req.params.userId)
     const id = parseInt(req.params.userId);
     let user = members.filter(member => member.id === id);
     // console.log(user)
@@ -52,6 +52,28 @@ app.delete("/deleteUser/:uid", (req, res) => {
         res.status(400).json({message: `User not found with id ${id}`})
     }
 })
+
+app.put("/updateUser/:id", (req, res) => {
+    const userId = parseInt(req.params.id)
+    const found = members.some(member => member.id === userId)
+    // console.log(found)
+
+    if (found) {
+        const updateMember = req.body;
+        // console.log(updateMember)
+        members.forEach(member => {
+            if (member.id ===  userId){
+                member.name = updateMember.name
+                member.email = updateMember.email
+            }
+        })
+        res.status(200).json(members)
+        
+    } else {
+        res.status(404).json({message: "User not found!!"})
+    }
+})
+
 
 
 app.listen(PORT, ()=> {
